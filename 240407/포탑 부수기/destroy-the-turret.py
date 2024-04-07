@@ -1,24 +1,5 @@
 from collections import deque
 
-
-# # 부서지지 않은 포탑 1개 중단
-# 1. 공격자 선정
-# 가장 약한 포탑 -> 가장 최근 공격한 -> 행과 열의 합이 큰 -> 열의 값이 큰
-# 튜플로 최근 저장해서 소팅해서 정렬
-# 공격력 + N + M
-# 2. 공격
-# 가장 강한 포탑 -> 공격한지 오래된 -> 행과 열의 합이 작은 -> 열이 가장 작은
-# 2-1 레이저 공격
-# 상하좌우, 부서진 포탑안됨, 벽 뚤고 가능, 최단 경로 -> 우 하 좌 상 순서
-# 경로 공격력 //2 목표물 풀로 데미지
-# 2-2 포탄 공격
-# 목표물 풀로 데미지 주변 8방향 절반
-
-# 공격력 <0 -> 부서짐
-
-# 공격 무관 -> 공격력 + 1,
-
-
 def attackChoose():
     bomb = []
     for x in range(n):
@@ -30,8 +11,8 @@ def attackChoose():
     attacker = bomb[0]
     graph[attacker[0]][attacker[1]] += (n+m)
     bomb = bomb[1:]
-    bomb.sort(key=lambda x: (-x[2], x[3], x[0] + x[1], x[1]))
-    attacked = bomb[0]
+    #bomb.sort(key=lambda x: (-x[2], x[3], x[0] + x[1], x[1]))
+    attacked = bomb[-1]
     return attacker, attacked
 
 def layserAttack(attacker, attacked):
