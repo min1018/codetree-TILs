@@ -6,6 +6,8 @@ def attackChoose():
         for y in range(m):
             if graph[x][y] != 0:
                 bomb.append((x, y, graph[x][y], recent[x][y]))
+    if len(bomb) == 1:
+        return -1, -1
     bomb.sort(key=lambda x: (x[2], -x[3], -x[0] + x[1], -x[1]))
     attacked, attacker = bomb[-1], bomb[0]
     graph[attacker[0]][attacker[1]] += (n+m)
@@ -77,6 +79,8 @@ recent = [[0] * m for _ in range(n)]
 
 for i in range(1, k+1):
     attacker, attacked = attackChoose()
+    if attacker == -1 and attacked == -1:
+        break
     recent[attacker[0]][attacker[1]] = i
     path = layserAttack(attacker, attacked)
     if len(path) == 0:
