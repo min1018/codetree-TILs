@@ -63,9 +63,8 @@ def bombAttack(attacker, attacked):
         if nx < 0: nx += n
         if ny < 0: ny += m
         #print("not in ", nx, ny)
-        if (nx, ny) != (tx, ty):
+        if (nx, ny) != (tx, ty) and (nx, ny) != (attacker[0], attacker[1]):
             if graph[nx][ny] != 0:
-                #print(nx, ny)
                 graph[nx][ny] -= (attacker[2]+n+m)//2
                 if graph[nx][ny] < 0:
                     graph[nx][ny] = 0
@@ -91,7 +90,7 @@ graph = [list(map(int, input().split(" "))) for _ in range(n)]
 recent = [[0] * m for _ in range(n)]
 
 for i in range(1, k+1):
-    #print("try", i)
+    # print("try", i)
     attacker, attacked = attackChoose()
     # print("Attacker", attacker)
     # print("Attacked", attacked)
@@ -100,10 +99,12 @@ for i in range(1, k+1):
     recent[attacker[0]][attacker[1]] = i
     path = layserAttack(attacker, attacked)
     if len(path) == 0:
-        #print("bomb")
+        # print("bomb")
         path = bombAttack(attacker, attacked)
+    # else:
+    #     print("layser")
     reset(path)
-    #print(graph)
+    # print(graph)
 
 
 
