@@ -7,10 +7,8 @@ def attackChoose():
             if graph[x][y] != 0:
                 bomb.append((x, y, graph[x][y], recent[x][y]))
     bomb.sort(key=lambda x: (x[2], -x[3], -x[0] + x[1], -x[1]))
-    #print("choose attacker", bomb)
     attacked, attacker = bomb[-1], bomb[0]
     graph[attacker[0]][attacker[1]] += (n+m)
-    #bomb.sort(key=lambda x: (-x[2], x[3], x[0] + x[1], x[1]))
     return attacker, attacked
 
 def layserAttack(attacker, attacked):
@@ -35,10 +33,8 @@ def layserAttack(attacker, attacked):
         for i in range(4):
             nx = (x + dx[i]) % n
             ny = (y + dy[i]) % m
-            while nx < 0:
-                nx += n
-            while ny < 0:
-                ny += m
+            if nx < 0: nx += n
+            if ny < 0: ny += m
             if 0 <= nx < n and 0 <= ny < m:
                 if graph[nx][ny] != 0 and visited[nx][ny] == 0:
                     q.append((nx, ny))
@@ -62,8 +58,6 @@ def bombAttack(attacker, attacked):
                 graph[nx][ny] -= (attacker[2]+n+m)//2
                 path.append((nx, ny))
     graph[attacked[0]][attacked[1]] -= (attacker[2]+n+m)
-    #print("after bomb in func ",graph)
-    #print("bomb path", path)
     return path
 
 
@@ -82,25 +76,17 @@ graph = [list(map(int, input().split(" "))) for _ in range(n)]
 recent = [[0] * m for _ in range(n)]
 
 for i in range(1, k+1):
-    #print("try ", i)
     attacker, attacked = attackChoose()
     recent[attacker[0]][attacker[1]] = i
-    #print(attacker, attacked)
     path = layserAttack(attacker, attacked)
 
     if len(path) == 0:
         path = bombAttack(attacker, attacked)
-        # print("path", path)
-        # print("after bomb")
-    #else:
-        # print("path", path)
-        # print("after layser")
     reset(path)
 
 
 
 ans = 0
-#print(graph)
 for x in range(n):
     ans = max(ans, max(graph[x]))
 print(ans)
