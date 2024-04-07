@@ -8,8 +8,11 @@ def attackChoose():
                 bomb.append((x, y, graph[x][y], recent[x][y]))
     if len(bomb) == 1:
         return -1, -1
-    bomb.sort(key=lambda x: (x[2], -x[3], -x[0] + x[1], -x[1]))
-    attacked, attacker = bomb[-1], bomb[0]
+    bomb.sort(key=lambda x: (x[2], -x[3], -(x[0] + x[1]), -x[1]))
+    attacker = bomb[0]
+    bomb = bomb[1:]
+    bomb.sort(key = lambda x: (-x[2], x[3], (x[0]+x[1]), x[1]))
+    attacked = bomb[0]
     graph[attacker[0]][attacker[1]] += (n+m)
     return attacker, attacked
 
@@ -25,12 +28,16 @@ def layserAttack(attacker, attacked):
         x, y = q.popleft()
         if x == attacked[0] and y == attacked[1]:
             graph[x][y] -= (power+n+m)
+            if graph[x][y] < 0:
+                graph[x][y] = 0
             path.append((x, y))
             x, y = visited[x][y][0], visited[x][y][1]
             while True:
                 if x == ax and y == ay: break
                 path.append((x, y))
                 graph[x][y] -= (power + n + m) // 2
+                if graph[x][y] < 0:
+                    graph[x][y] = 0
                 x, y = visited[x][y]
             return path
         for i in range(4):
@@ -46,22 +53,27 @@ def layserAttack(attacker, attacked):
 
 def bombAttack(attacker, attacked):
     tx, ty, _, _ = attacked
+    #print("attacked", tx, ty)
     path = []
     dx = [-1, 1, 0, 0, -1, 1, -1, 1]
     dy = [0, 0, -1, 1, 1, -1, -1, 1]
     for i in range(8):
         nx = (tx + dx[i]) % n
         ny = (ty + dy[i]) % m
-        while nx < 0 :
-            nx += n
-        while ny < 0:
-            ny += m
-        if 0 <= nx < n and 0 <= ny < m and nx != tx and ny != ty:
+        if nx < 0: nx += n
+        if ny < 0: ny += m
+        #print("not in ", nx, ny)
+        if (nx, ny) != (tx, ty):
             if graph[nx][ny] != 0:
+                #print(nx, ny)
                 graph[nx][ny] -= (attacker[2]+n+m)//2
+                if graph[nx][ny] < 0:
+                    graph[nx][ny] = 0
                 path.append((nx, ny))
     path.append((tx, ty))
     graph[tx][ty] -= (attacker[2]+n+m)
+    if graph[tx][ty] < 0:
+        graph[tx][ty] = 0
     return path
 
 
@@ -70,8 +82,7 @@ def reset(path):
         for k in range(m):
             if (i, k) not in path and (i, k) != (attacker[0], attacker[1]) and graph[i][k] != 0:
                 graph[i][k] += 1
-            if graph[i][k] < 0:
-                graph[i][k] = 0
+
 
 
 
@@ -80,7 +91,7 @@ graph = [list(map(int, input().split(" "))) for _ in range(n)]
 recent = [[0] * m for _ in range(n)]
 
 for i in range(1, k+1):
-    # print("try", i)
+    #print("try", i)
     attacker, attacked = attackChoose()
     # print("Attacker", attacker)
     # print("Attacked", attacked)
@@ -89,9 +100,10 @@ for i in range(1, k+1):
     recent[attacker[0]][attacker[1]] = i
     path = layserAttack(attacker, attacked)
     if len(path) == 0:
+        #print("bomb")
         path = bombAttack(attacker, attacked)
     reset(path)
-    # print(graph)
+    #print(graph)
 
 
 
