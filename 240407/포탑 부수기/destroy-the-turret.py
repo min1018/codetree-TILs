@@ -8,11 +8,9 @@ def attackChoose():
                 bomb.append((x, y, graph[x][y], recent[x][y]))
     bomb.sort(key=lambda x: (x[2], -x[3], -x[0] + x[1], -x[1]))
     #print("choose attacker", bomb)
-    attacker = bomb[0]
+    attacked, attacker = bomb[-1], bomb[0]
     graph[attacker[0]][attacker[1]] += (n+m)
-    bomb = bomb[1:]
     #bomb.sort(key=lambda x: (-x[2], x[3], x[0] + x[1], x[1]))
-    attacked = bomb[-1]
     return attacker, attacked
 
 def layserAttack(attacker, attacked):
