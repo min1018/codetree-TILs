@@ -6,7 +6,7 @@ dy = [0, 1, 0, -1]
 
 
 def moveKnight(num, dir):
-
+    visited = [[0] * n for _ in range(n)]
     if power[num-1] - damage[num-1] <= 0:
         return
     q = deque()
@@ -26,9 +26,10 @@ def moveKnight(num, dir):
             ny = k[1] + dy[dir]
             if 0 <= nx < n and 0 <= ny < n:
                 # 빈칸 혹은 기사 있음
-                if graph[nx][ny] != 2: # 벽 아님
+                if graph[nx][ny] != 2 and visited[nx][ny] == 0: # 벽 아님
                     moved[pushed].append([nx, ny])
                     for i in range(mem):
+                        visited[nx][ny] = 1
                         #print(nx, ny, "knight[i]", knight[i])
                         if i == pushed or [nx, ny] not in knight[i]: # 빈칸
                             continue
@@ -74,6 +75,8 @@ for i in range(mem):
         for h in range(y, y+w):
             #print(q, h)
             knight[i].append([q, h])
+
+
 
 for i in range(1,order+1):
     #print("try", i)
