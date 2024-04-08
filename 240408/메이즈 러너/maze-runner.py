@@ -30,23 +30,17 @@ def move():
             ny = y + dy[k]
             if 0 <= nx < n and 0<= ny < n and graph[nx][ny] <= 0: # 탈출할 수도 있으니 <=
                 if nx == door[0] and ny == door[1]: # 탈출
-                    # print("escape")
-                    # print("dist: ", abs(nx - door[0]) + abs(ny - door[1]))
                     graph[x][y] = 0
                     ans += 1
                     break
                 temp.append((nx, ny, abs(door[0]-nx) + abs(door[1]-ny)))
         if len(temp) != 0:
             temp.sort(key = lambda x: (x[2]))
-            # print("temp", x, y)
-            # print(temp)
             tx, ty, dist = temp[0]
             if dist != 0 and dist < standard:
                 graph[tx][ty] = 10
                 graph[x][y] = 0
                 ans += 1
-                # print("이친구의 ", x, y)
-                # print("dist", dist)
 
 def getSquare():
     # 크기, x 작은, y 작은 순
@@ -62,7 +56,6 @@ def getSquare():
         px, py = i[0], i[1]
         dx, dy = door[0], door[1]
         length = max(abs(px-dx), abs(py-dy))
-        # print("square length, px, py", length, px, py)
         tx, ty = max(dx, px), max(dy, py)
         if tx - length >= 0:
             tx = tx - length
@@ -74,21 +67,17 @@ def getSquare():
             ty = 0
         poss.append((length + 1, tx, ty))
     poss.sort(key = lambda x: (x[0], x[1], x[2]))
-    # print("poss", poss)
     return poss[0]
 
 
 def turn(length, sx, sy):
     temp = [[0]* n for _ in range(n)]
-    #temp[k][n-1-i] = graph[i][k]
     for i in range(sx, sx+length):
         for k in range(sy, sy+length):
             ox, oy = i - sx , k - sy
             #tx, ty = length - ox -1, oy
             tx, ty = oy, length - ox - 1
-            # print(tx, ty, i, k)
             temp[sx + tx][sy + ty] = graph[i][k]
-    # print("temp", temp)
     for i in range(sx, sx+length):
         for k in range(sy, sy+length):
             if 0 < temp[i][k] < 10: # 출구, 빈칸 아니고 사람 아니면
@@ -104,18 +93,14 @@ for _ in range(mem):
     graph[x-1][y-1] = 10
 x, y = map(int, input().split(" "))
 graph[x-1][y-1] = -1
-# print(graph)
 
 for i in range(1, time+1):
-    # print("try", i)
     move()
-    # print("after move", graph)
     if flag == -1:
         break
     length, sx, sy = getSquare()
-    # print("true square", length, sx, sy)
     turn(length, sx, sy)
-    # print("after turn", graph)
+    
 print(ans)
 for i in range(n):
     for k in range(n):
