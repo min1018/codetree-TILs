@@ -83,7 +83,7 @@ def choosePoison(length):
         #print("poss", poss)
         return poss[0][1], poss[0][2]
     else:
-        print(graph)
+        #print(graph)
         return -1, -1
 
 
