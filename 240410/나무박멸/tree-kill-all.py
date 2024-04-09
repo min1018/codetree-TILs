@@ -76,9 +76,12 @@ def choosePoison(length):
                 # print("poison cnt",i, k, cnt)
                 best = max(best, cnt)
                 poss.append((cnt, i, k))
-    poss.sort(key=lambda x: (-x[0], x[1], x[2]))
-    #print("poss", poss)
-    return poss[0][1], poss[0][2]
+    if poss:    
+        poss.sort(key=lambda x: (-x[0], x[1], x[2]))
+        #print("poss", poss)
+        return poss[0][1], poss[0][2]
+    else:
+        return -1, -1
 
 
 def spreadPoison(px, py, length):
@@ -123,7 +126,11 @@ for _ in range(Y):
     #print("after spread", graph)
     px, py = choosePoison(l)
     #print("px, py", px, py)
+    if px == -1 and py == -1:
+        #print(ans)
+        continue
     spreadPoison(px, py, l)
     #print("after poison", graph)
+    #print(ans)
 
 print(ans)
