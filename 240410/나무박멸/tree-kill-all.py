@@ -13,6 +13,7 @@ def growth():
                     nx = i + dx[h]
                     ny = k + dy[h]
                     if 0 <= nx < n and 0 <= ny < n:
+                        # 나무가 있는 칸 수만큼 성장 
                         if graph[nx][ny] > 0 and graph[nx][ny] != 9999999:
                             graph[i][k] += 1
             elif graph[i][k] < 0:
@@ -33,6 +34,7 @@ def spread():
                     nx = i + dx[h]
                     ny = k + dy[h]
                     if 0 <= nx < n and 0 <= ny < n:
+                        # 벽, 다른 나무, 제초제 아닌 -> 빈칸인 
                         if graph[nx][ny] == 0:
                             cnt += 1
                             temp.append((nx, ny))
@@ -81,6 +83,7 @@ def choosePoison(length):
         #print("poss", poss)
         return poss[0][1], poss[0][2]
     else:
+        print(graph)
         return -1, -1
 
 
@@ -101,14 +104,18 @@ def spreadPoison(px, py, length):
             ny = y + dy[h]
             if px - length <= nx <= px + length and py - length <= ny <= py + length:
                 if 0 <= nx < n and 0 <= ny < n and visited[nx][ny] == 0:
-                    if graph[nx][ny] >= 0 and graph[nx][ny] != 9999999:
-                        if graph[nx][ny] > 0:
-                            #print("dead", graph[nx][ny])
-                            ans += graph[nx][ny]
-                        visited[nx][ny] = 1
+                    if graph[nx][ny] == 9999999: #벽이면 멈춰
+                        break
+                    elif graph[nx][ny] > 0:
+                        #print("dead", graph[nx][ny])
+                        ans += graph[nx][ny]
                         graph[nx][ny] = -c-1
                         q.append((nx, ny))
-
+                    elif graph[nx][ny] == 0:
+                        # q.append((nx, ny)) wow 나무가 없는 경우 그칸까지만 제초제...
+                        graph[nx][ny] = -c-1
+                    elif graph[nx][ny] < 0:
+                        graph[nx][ny] = -c-1
 
 n, Y, l, c = map(int, input().split())
 graph = [list(map(int, input().split())) for _ in range(n)]
