@@ -19,7 +19,7 @@ def moveKnight(num, dir):
     while q:
         pushed = q.popleft()
         if visited[pushed] == 1:
-            break
+            continue
         visited[pushed] = 1
         #print("pushed", pushed)
         if power[pushed] - damage[pushed] <= 0: # 이미 죽은 기사
