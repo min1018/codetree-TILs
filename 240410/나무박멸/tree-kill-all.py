@@ -107,8 +107,8 @@ def spreadPoison(px, py, length):
                         q.append((nx, ny))
 
 
-n, year, l, c = map(int, input().split(" "))
-graph = [list(map(int, input().split(" "))) for _ in range(n)]
+n, Y, l, c = map(int, input().split())
+graph = [list(map(int, input().split())) for _ in range(n)]
 
 # 벽을 문자로
 for i in range(n):
@@ -116,7 +116,7 @@ for i in range(n):
         if graph[i][k] == -1:
             graph[i][k] = 9999999
 
-for _ in range(year):
+for _ in range(Y):
     growth()
     #print("after growth", graph)
     spread()
