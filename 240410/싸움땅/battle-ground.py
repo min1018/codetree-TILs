@@ -43,14 +43,10 @@ def play(px, py, d, power, gun, i):
                     win, loose = num, i
             #포인트 획득
             point[win] += abs((player[loose][3]+player[loose][4]) - (player[win][3]+player[win][4]))
+            
             # 진사람 총 두고 감 
             graph[px][py].append(player[loose][4])
             player[loose][4] = 0 
-
-            # 이긴 사람 총 교체 
-            for t in range(len(graph[px][py])):
-                if player[win][4] < graph[px][py][t]:
-                    player[win][4], graph[px][py][t] = graph[px][py][t], player[win][4]
 
             # player 진 -> 간 땅에 초이 있으면 줍, 없으면 gun 0
             while True:
@@ -74,8 +70,14 @@ def play(px, py, d, power, gun, i):
                 
             player[loose][0], player[loose][1] = nx, ny
             for tg in range(len(graph[nx][ny])):
-                if graph[nx][ny][tg] > 0:
+                if graph[nx][ny][tg] > player[loose][4]:
                     player[loose][4], graph[nx][ny][tg] = graph[nx][ny][tg], player[loose][4]
+
+            # 이긴 사람 총 교체 
+            for t in range(len(graph[px][py])):
+                if player[win][4] < graph[px][py][t]:
+                    player[win][4], graph[px][py][t] = graph[px][py][t], player[win][4]
+
 
             
 
