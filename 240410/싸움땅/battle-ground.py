@@ -67,8 +67,10 @@ def play(px, py, d, power, gun, i):
                     if sign == 1:
                         player[loose][2] = (player[loose][2] + 5)%4 # 사람이 있는 경우 회전 
                     
-                else:
+                else: # 범위 밖
+                    sign = 1
                     player[loose][2] = (player[loose][2] + 5)%4 # 벽이 있는 경우 회전 
+                    
                 # 사람 있으면 혹은 벽이라면 -> 90도 회전 
                 if sign == 0:
                     player[loose][0], player[loose][1] = nx, ny
