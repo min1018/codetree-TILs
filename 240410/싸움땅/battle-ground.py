@@ -72,9 +72,10 @@ def play(px, py, d, power, gun, i):
                 # 사람 있으면 혹은 벽이라면 -> 90도 회전 
                 if sign == 0:
                     player[loose][0], player[loose][1] = nx, ny
-                    for tg in range(len(graph[nx][ny])):
-                        if graph[nx][ny][tg] > 0:
-                            player[loose][4], graph[nx][ny][tg] = graph[nx][ny][tg], player[loose][4]
+                    if len(graph[nx][ny]) > 0:
+                        for tg in range(len(graph[nx][ny])):
+                            if graph[nx][ny][tg] > 0:
+                                player[loose][4], graph[nx][ny][tg] = graph[nx][ny][tg], player[loose][4]
                     break
 
 
