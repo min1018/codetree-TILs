@@ -1,7 +1,6 @@
 import time
 from collections import deque
 
-
 def getBase(idx):
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
@@ -11,6 +10,7 @@ def getBase(idx):
         for k in range(n):
             if graph[i][k] == 1:
                 base.append([i, k, 0])
+    # print("every possible base for", idx, base)
     poss = []
     for h in range(len(base)):
         q = deque()
@@ -27,7 +27,7 @@ def getBase(idx):
                     if (tx, ty) == (nx, ny):
                         poss.append([x, y, cnt + 1])
                         break
-                    if graph[nx][ny] != -1 and visited[nx][ny] == 0:
+                    if graph[nx][ny] != -1 and visited[nx][ny] == 0 and (nx, ny) not in change:
                         q.append([nx, ny, cnt + 1])
                         visited[nx][ny] = 1
     poss.sort(key=lambda x: (x[2], x[0], x[1]))
@@ -35,38 +35,32 @@ def getBase(idx):
 
 
 def getNext(idx, cx, cy):
+    # print("idx", idx)
     tx, ty = player[idx]
+    q = deque()
+    q.append((cx, cy, -1, -1))
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
-    q = deque()
-    poss = []
     visited = [[0] * n for _ in range(n)]
-    visited[cx][cy] = 1
-    for a in range(4):
-        nx = cx + dx[a]
-        ny = cy + dy[a]
-        if 0 <= nx < n and 0 <= ny < n:
-            if graph[nx][ny] != -1:
-                if (nx, ny) == (player[idx][0], player[idx][1]):
-                    return nx, ny
-                q.append((nx, ny, nx, ny, 1))
-                visited[nx][ny] = 1
     while q:
-        x, y, ix, iy, cnt = q.popleft()
+        x, y, ix, iy = q.popleft()
         for h in range(4):
             nx = x + dx[h]
             ny = y + dy[h]
-            if 0 <= nx < n and 0 <= ny < n:
-                if graph[nx][ny] != -1 and visited[nx][ny] == 0:
-                    if (tx, ty) == (nx, ny):
-                        poss.append((ix, iy, cnt + 1))
-                        visited[nx][ny] = 1
-                        break
+            if 0 <= nx < n and 0 <= ny < n and graph[nx][ny] != -1 and visited[nx][ny] == 0 and (nx, ny) not in change:
+                # 범위 안, 방문 가능한 지역 
+                if (nx, ny) == (tx, ty):
+                    if ix == -1 and iy == -1:
+                        return nx, ny
+                    else: 
+                        return ix, iy 
+                elif ix == -1 and iy == -1: # 방문 첨해서 초기 위치가 저장 안돈 경우 
+                    q.append((nx, ny, nx, ny))
                     visited[nx][ny] = 1
-                    q.append((nx, ny, ix, iy, cnt + 1))
-
-    poss.sort(key=lambda x: (x[2], x[0], x[1]))
-    return poss[0][0], poss[0][1]
+                else:
+                    q.append((nx, ny, ix, iy))
+                    visited[nx][ny] = 1
+                
 
 
 n, mem = map(int, input().split())
@@ -84,12 +78,10 @@ T = 0
 
 while True:
     T += 1
-    if T - 1 < mem:
-        x, y = getBase(T - 1)
-        curr[T - 1] = [x, y]
-        change.append((x, y))
+    # print("t", T)
+    # print("start graph", graph)
     for i in range(len(curr)):
-        if len(curr[i]) > 0 and i != T - 1:
+        if len(curr[i]) > 0:
             cx, cy = curr[i]
             if (cx, cy) != (player[i][0], player[i][1]):
                 nx, ny = getNext(i, cx, cy)
@@ -97,8 +89,15 @@ while True:
                 if (nx, ny) == (player[i][0], player[i][1]):
                     ans += 1
                     change.append((nx, ny))
+    if T - 1 < mem:
+        x, y = getBase(T - 1)
+        curr[T - 1] = [x, y]
+        graph[x][y] = -1
     for ax, ay in change:
         graph[ax][ay] = -1
+    # print("curr ans", ans)
+    # print("curr", curr)
+    # print("graph", graph)
     if ans == mem:
         print(T)
         break
