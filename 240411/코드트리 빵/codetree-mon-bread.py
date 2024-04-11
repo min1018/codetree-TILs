@@ -80,19 +80,29 @@ while True:
     T += 1
     # print("t", T)
     # print("start graph", graph)
+    again = []
     for i in range(len(curr)):
         if len(curr[i]) > 0:
             cx, cy = curr[i]
             if (cx, cy) != (player[i][0], player[i][1]):
                 nx, ny = getNext(i, cx, cy)
-                curr[i] = [nx, ny]
                 if (nx, ny) == (player[i][0], player[i][1]):
                     ans += 1
+                    curr[i] = [nx, ny]
                     change.append((nx, ny))
+                else:
+                    again.append(i)
+    if len(again) > 0:
+        for idx in again:
+            x, y = curr[idx]
+            nx, ny = getNext(idx, x, y)
+            curr[idx] = [nx, ny]
+
+    # base 찾기 
     if T - 1 < mem:
         x, y = getBase(T - 1)
         curr[T - 1] = [x, y]
-        graph[x][y] = -1
+        change.append((x, y))
     for ax, ay in change:
         graph[ax][ay] = -1
     # print("curr ans", ans)
