@@ -61,8 +61,8 @@ def rotateSqaure(length, sx, sy):
         for y in range(sy, sy+length):
             ox, oy = x-sx, y-sy
             mx, my = oy, length - 1 - ox
-            new[sx + mx][sx + my] = graph[x][y]
-    #print("new, new")
+            new[sx + mx][sy + my] = graph[x][y]
+     #print("new", new)
     for i in range(sx, sx+length):
         for k in range(sy, sy+length):
             if new[i][k] != 0:
@@ -102,7 +102,7 @@ ex, ey = ex-1, ey-1
 
 
 for T in range(k):
-    print(T+1)
+    # print(T+1)
     # 모든 참가자 탈출 시 종료 
     #print(player)
     playerMove()
@@ -110,13 +110,14 @@ for T in range(k):
         break
     #print(player)
     length, sx, sy = searchSqaure()
-    print("square", length, sx, sy)
+    #print("square", length, sx, sy)
     rotateSqaure(length, sx, sy)
     playerExitRotate(length, sx, sy)
-    print(graph)
-    print("player", player)
-    print("exit", ex, ey)
+    # print(graph)
+    # print("player", player)
+    # print("exit", ex, ey)
+    # print("move", move)
 
 # 이동거리 합, 출구 좌표 
 print(move)
-print(ex, ey)
+print(ex+1, ey+1)
