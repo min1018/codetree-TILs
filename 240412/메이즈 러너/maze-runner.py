@@ -14,7 +14,7 @@ def playerMove():
                 if 0 <= nx < n and 0 <= ny < n and graph[nx][ny] == 0:
                     moveDist = abs(ex-nx)+abs(ey-ny)
                     #print("nx, ny, currDist, moveDist", nx, ny, currDist, moveDist)
-                    if moveDist < currDist:
+                    if moveDist < currDist: # 현재의 거리보다 가까워야함                                   
                         poss.append((moveDist, nx, ny))
             #print(i, poss)
             if len(poss) > 0:
@@ -46,7 +46,7 @@ def searchSqaure():
                 for h in range(len(player)):
                     if len(player[h]) > 0:
                         x, y = player[h]
-                        if sx <= x <= lx and sy <= y <= ly:
+                        if sx <= x < sx+ length and sy <= y < sy+length:
                             flag = 1
                             break
                 if flag == 1:
@@ -66,7 +66,7 @@ def rotateSqaure(length, sx, sy):
     for i in range(sx, sx+length):
         for k in range(sy, sy+length):
             if new[i][k] != 0:
-                graph[i][k] = new[i][k] - 1
+                graph[i][k] = new[i][k] - 1 #회전 시 내구도 깎임 
             else:
                 graph[i][k] = new[i][k]
 
@@ -104,7 +104,9 @@ ex, ey = ex-1, ey-1
 for T in range(k):
     # print(T+1)
     # 모든 참가자 탈출 시 종료 
-    #print(player)
+    #print(player)  
+    if done == mem:
+        break
     playerMove()
     if done == mem:
         break
