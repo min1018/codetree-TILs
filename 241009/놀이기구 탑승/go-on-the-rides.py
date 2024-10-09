@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 def bfs(curr):
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
@@ -46,7 +49,7 @@ board = [[0] * n for _ in range(n)]
 like = [[] for _ in range(n*n+1)]
 turn = []
 for _ in range(n*n):
-    p, a, b, c, d = map(int, input().split(" "))
+    p, a, b, c, d = map(int, input().rstrip().split(" "))
     like[p] = [a, b, c, d]
     turn.append(p)
 
