@@ -47,7 +47,7 @@ def score():
 
 
 board = [[0] * n for _ in range(n)]
-like = [[] for _ in range(n**2+1)]
+like = [[] for _ in range(n*n+1)]
 turn = []
 for _ in range(n*n):
     p, a, b, c, d = map(int, input().split(" "))
