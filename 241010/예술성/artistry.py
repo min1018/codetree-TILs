@@ -87,7 +87,7 @@ def calcScore(a, b):
     return (atotal+btotal) * anum * bnum * adic[b]
 
 n = int(input())
-board = [list(map(int, input().split(" "))) for _ in range(n)]
+board = [list(map(int, input().rstrip().split(" "))) for _ in range(n)]
 ans = 0
 
 for i in range(4):
